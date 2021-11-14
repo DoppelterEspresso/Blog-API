@@ -2,7 +2,17 @@ const Post = require("../models/post");
 const Comment = require("../models/comment");
 
 exports.comment_list = function (req, res, next) {
-  res.json({ title: "A test comment" });
+  Comment.find({ post: req.params.postid}).exec(function (err, list_comments) {
+    if (err) {
+      return next(err)
+    }
+    if (list_comments === null) {
+      var err = new Error("Comments not found");
+      err.status = 404;
+      return next(err);
+    }
+    res.json(list_comments);
+  })
 };
 
 exports.comment_detail = function (req, res, next) {
