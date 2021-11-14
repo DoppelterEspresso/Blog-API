@@ -30,8 +30,8 @@ exports.create_comment = function (req, res, next) {
       return next(err);
     }
     comment = new Comment({
-      author: "API Tester",
-      text: "PLACEHOLDER COMMENT",
+      author: req.body.author,
+      text: req.body.commentText,
       timestamp: Date.now(),
       post: post,
     });
@@ -39,7 +39,7 @@ exports.create_comment = function (req, res, next) {
       if (err) {
         return next(err);
       }
-      res.send(comment);
+      res.redirect(req.body.postUrl);
     });
   });
 };

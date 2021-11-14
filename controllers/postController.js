@@ -2,8 +2,12 @@ const Post = require("../models/post");
 const Comment = require("../models/comment");
 
 exports.post_list = function (req, res, next) {
-  let testObjects = [{ title: "Test Post", text: "Hello There!" }, { title: "Post 2", text: "Lorem ipsun" }];
-  res.json(testObjects)
+  Post.find({}).exec(function (err, posts) {
+    if (err) {
+      return next(err)
+    }
+    res.json(posts)
+  })
 };
 
 exports.post_detail = function (req, res, next) {
