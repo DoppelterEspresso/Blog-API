@@ -1,4 +1,5 @@
 const Post = require("../models/post");
+const Comment = require("../models/comment");
 
 exports.post_list = function (req, res, next) {
   let testObject = { title: "Test Post", text: "Hello There!" };
