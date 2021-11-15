@@ -2,11 +2,15 @@ var express = require('express');
 var router = express.Router();
 var passport = require("passport");
 const userController = require("../controllers/userController")
+var jwt = require("jsonwebtoken")
+require("dotenv").config();
 
 // POST login
 router.post("/", 
     passport.authenticate("local"),
     function(req, res) {
-        res.redirect(req.body.adminUrl + "panel")
+        jwt.sign({ user: req.user}, process.env.SECRET, { expiresIn: 120 }, (err, token) => {
+            res.json({token})
+        })
     })
 module.exports = router;

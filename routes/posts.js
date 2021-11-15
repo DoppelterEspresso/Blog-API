@@ -11,7 +11,7 @@ router.get("/", postController.post_list);
 router.get("/:id", postController.post_detail);
 
 // POST new post
-router.post("/", postController.create_post);
+router.post("/", verifyToken, postController.create_post);
 
 // --- POST COMMENTS ---
 
@@ -23,5 +23,20 @@ router.get("/:postid/comments/:commentid", commentController.comment_detail);
 
 // POST new comment
 router.post("/:postid/comments", commentController.create_comment);
+
+// VERIFY TOKEN
+function verifyToken(req, res, next) {
+    // get auth header value
+    const bearerHeader = req.headers["authorization"];
+    if (typeof bearerHeader !== "undefined") {
+        const bearer = bearerHeader.split(" ")
+        const bearerToken = bearer[1];
+        req.token = bearerToken;
+        next();
+    } else {
+        res.sendStatus(403);
+    }
+}
+
 
 module.exports = router;

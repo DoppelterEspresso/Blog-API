@@ -1,5 +1,7 @@
 const Post = require("../models/post");
 const Comment = require("../models/comment");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 exports.post_list = function (req, res, next) {
   Post.find({}).exec(function (err, posts) {
@@ -20,17 +22,26 @@ exports.post_detail = function (req, res, next) {
 };
 
 exports.create_post = function (req, res, next) {
-  var post = new Post({
-    title: "API TEST",
-    text: "PLACEHOLDER POST CREATED FOR TESTING",
-    timestamp: Date.now(),
-    published: false,
-  });
-
-  post.save(function (err) {
+  jwt.verify(req.token, process.env.SECRET, (err, authData) => {
     if (err) {
-      return next(err);
+      res.sendStatus(403);
+    } else {
+      var post = new Post({
+        title: req.body.title,
+        text: req.body.text,
+        timestamp: Date.now(),
+        published: false,
+      });
+  
+      post.save(function (err) {
+        if (err) {
+          return next(err);
+        }
+        res.json({
+          message: "Post created",
+          authData
+        })
+      })
     }
-    res.send(post);
-  });
+  })
 };
