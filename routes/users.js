@@ -9,7 +9,7 @@ require("dotenv").config();
 router.post("/", 
     passport.authenticate("local"),
     function(req, res) {
-        jwt.sign({ user: req.user}, process.env.SECRET, { expiresIn: 120 }, (err, token) => {
+        jwt.sign({ user: req.user}, process.env.SECRET, { expiresIn: "1h" }, (err, token) => {
             res.json({token})
         })
     })

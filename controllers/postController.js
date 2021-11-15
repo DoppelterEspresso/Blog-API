@@ -37,10 +37,8 @@ exports.create_post = function (req, res, next) {
         if (err) {
           return next(err);
         }
-        res.json({
-          message: "Post created",
-          authData
-        })
+        res.json({ message: "Success" });
+        return
       })
     }
   })

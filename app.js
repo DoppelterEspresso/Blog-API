@@ -3,7 +3,8 @@ var createError = require("http-errors");
 var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
-var jwt = require("jsonwebtoken")
+var jwt = require("jsonwebtoken");
+var flash = require("connect-flash");
 var logger = require("morgan");
 var cors = require("cors");
 var session = require("express-session");
@@ -30,6 +31,8 @@ var app = express();
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
+
+app.use(flash());
 
 passport.use(
   new LocalStrategy((username, password, done) => {
