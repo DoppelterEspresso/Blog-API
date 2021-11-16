@@ -24,6 +24,9 @@ router.get("/:postid/comments/:commentid", commentController.comment_detail);
 // POST new comment
 router.post("/:postid/comments", commentController.create_comment);
 
+// DELETE comment
+router.delete("/:postid/comments/:commentid", verifyToken, commentController.delete_comment);
+
 // VERIFY TOKEN
 function verifyToken(req, res, next) {
     // get auth header value

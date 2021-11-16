@@ -1,5 +1,7 @@
 const Post = require("../models/post");
 const Comment = require("../models/comment");
+const jwt = require("jsonwebtoken");
+
 
 exports.comment_list = function (req, res, next) {
   Comment.find({ post: req.params.postid}).exec(function (err, list_comments) {
@@ -43,3 +45,19 @@ exports.create_comment = function (req, res, next) {
     });
   });
 };
+
+exports.delete_comment = function(req, res, next) {
+  jwt.verify(req.token, process.env.SECRET, (err, authData) => {
+    if (err) {
+      res.sendStatus(403);
+    } else {
+      Comment.findByIdAndRemove(req.params.commentid, function deleteComment(err) {
+        if (err) {
+          res.json({ message: "Something went wrong", err: err });
+          return;
+        }
+        res.json({ message: "Comment deleted" })
+      })
+    }
+  })
+}
