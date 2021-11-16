@@ -4,11 +4,26 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 exports.post_list = function (req, res, next) {
-  Post.find({}).exec(function (err, posts) {
+  jwt.verify(req.headers["authorization"], process.env.SECRET, (err, authData) => {
     if (err) {
-      return next(err)
+      Post.find({ published: true }).exec(function (err, posts) {
+        if (err) {
+          res.json({ message: "Something went wrong" })
+          return;
+        }
+        res.json(posts)
+        return
+      })
+    } else {
+      Post.find({}).exec(function (err, posts) {
+        if (err) {
+          res.json({ message: "Something went wrong" })
+          return;
+        }
+        res.json(posts)
+        return
+      })
     }
-    res.json(posts)
   })
 };
 
