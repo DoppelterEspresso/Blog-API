@@ -8,10 +8,16 @@ var commentController = require("../controllers/commentController");
 router.get("/", postController.post_list);
 
 // GET specific post
-router.get("/:id", postController.post_detail);
+router.get("/:postid", postController.post_detail);
+
+// PUT update post
+router.put("/:postid", verifyToken, postController.update_post)
 
 // POST new post
 router.post("/", verifyToken, postController.create_post);
+
+// DELETE post
+router.delete("/:postid", verifyToken, postController.delete_post);
 
 // --- POST COMMENTS ---
 

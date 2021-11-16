@@ -13,7 +13,7 @@ exports.post_list = function (req, res, next) {
 };
 
 exports.post_detail = function (req, res, next) {
-  Post.findById(req.params.id).exec(function (err, post) {
+  Post.findById(req.params.postid).exec(function (err, post) {
     if (err) {
       return next(err)
     }
@@ -43,3 +43,33 @@ exports.create_post = function (req, res, next) {
     }
   })
 };
+
+exports.delete_post = function (req, res, next) {
+  jwt.verify(req.token, process.env.SECRET, (err, authData) => {
+    if (err) {
+      res.json({ message: "Failure" });
+    } else {
+      Post.findByIdAndRemove(req.params.postid, function deletePost(err) {
+        if (err) {
+          res.json({ message: "Something went wrong", err: err });
+          return;
+        }
+        res.json({ message: "Success" })
+      })
+    }
+  })
+}
+
+exports.update_post = function (req, res, next) {
+  jwt.verify(req.token, process.env.SECRET, (err, authData) => {
+    if (err) {
+      res.json({ message: "Failure" });
+    } else {
+      Post.findById(req.params.postid).exec(function (err, post) {
+        post.published = !post.published
+        post.save()
+        res.json({ message: "Success" })
+      })
+    }
+  })
+}
