@@ -1,4 +1,6 @@
 var mongoose = require("mongoose");
+var compression = require("compression");
+var helmet = require("helmet");
 var createError = require("http-errors");
 var express = require("express");
 var path = require("path");
@@ -28,6 +30,8 @@ const User = require("./models/user")
 
 var app = express();
 
+app.use(helmet());
+app.use(compression())
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
